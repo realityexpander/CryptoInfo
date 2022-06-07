@@ -1,4 +1,4 @@
-package com.realityexpander.cryptoapp
+package com.realityexpander.cryptoapp.presentation.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

@@ -6,7 +6,7 @@ import com.realityexpander.cryptoapp.data.remote.dto.CoinInfoDTO
 import com.realityexpander.cryptoapp.domain.repository.CoinRepositoryInterface
 import javax.inject.Inject
 
-abstract class CoinRepositoryImpl @Inject constructor(
+class CoinRepositoryImpl @Inject constructor(
     private val coinApi: CoinPaprikaAPI
 ) : CoinRepositoryInterface {
 
