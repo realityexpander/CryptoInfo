@@ -1,4 +1,4 @@
-package com.realityexpander.cryptoapp.ui.theme
+package com.realityexpander.cryptoapp.presentation.ui.theme
 
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors

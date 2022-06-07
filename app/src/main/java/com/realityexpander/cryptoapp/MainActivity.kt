@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import com.realityexpander.cryptoapp.ui.theme.CryptoAppTheme
+import com.realityexpander.cryptoapp.presentation.ui.theme.CryptoAppTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
