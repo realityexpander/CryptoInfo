@@ -1,4 +1,4 @@
-# CryptoApp
+# Crypto Info
 Cryptocurrency info App built with MVVM, Use Cases, Compose, Custom charts, Retrofit, api from coinpaprika.com
 
 [<img src="https://user-images.githubusercontent.com/5157474/172730193-3b276290-b6d7-4a96-8ee3-705c63f5d37b.png" width="350"/>](https://user-images.githubusercontent.com/5157474/172730193-3b276290-b6d7-4a96-8ee3-705c63f5d37b.png)
