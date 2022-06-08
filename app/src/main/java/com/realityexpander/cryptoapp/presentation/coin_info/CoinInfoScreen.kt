@@ -63,7 +63,7 @@ fun CoinInfoScreen(
                     Spacer(modifier = Modifier.height(15.dp))
                 }
 
-                if (!state.isError && !state.isLoading) {
+                if (!state.isLoading) {
                     if(state.coinInfo.coinId.isNotEmpty()) { // check empty instead of null for better UX
                         val coinInfo = state.coinInfo
 
