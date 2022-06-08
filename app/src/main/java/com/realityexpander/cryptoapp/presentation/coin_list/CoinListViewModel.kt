@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.realityexpander.cryptoapp.common.Resource
+import com.realityexpander.cryptoapp.domain.models.Coin
 import com.realityexpander.cryptoapp.domain.use_case.get_coins.GetCoinsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -37,6 +38,9 @@ class CoinListViewModel @Inject constructor(
 //        }
 
         getCoinsUseCase().onEach { result ->
+//            val result2: Resource<*> = // keep for testing
+//                Resource.Error<List<Coin>>(errorMessage = "", message = "Network error.")
+
             when (result) {
                 is Resource.Success -> {
                     state.value = state.value.copy(
@@ -49,7 +53,7 @@ class CoinListViewModel @Inject constructor(
                     state.value = state.value.copy(
                         isLoading = false,
                         isError = true,
-                        errorMessage = result.errorMessage ?: "Unknown Error"
+                        errorMessage = result.message ?: "Unknown Error"
                     )
                 }
                 is Resource.Loading -> {

@@ -6,5 +6,5 @@ data class CoinInfoState(
     val isLoading: Boolean = true,
     val isError: Boolean = false,
     val errorMessage: String = "",
-    val coinInfo: CoinInfo? = null
+    val coinInfo: CoinInfo = CoinInfo()
 )

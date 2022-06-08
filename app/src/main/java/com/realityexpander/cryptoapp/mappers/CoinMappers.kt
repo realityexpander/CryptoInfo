@@ -48,4 +48,4 @@ fun CoinInfo.toCoinInfoDTO() = CoinInfoDTO(
 
 fun List<CoinDTO>.toCoins() = map { it.toCoin() }
 
-fun List<Coin>.toCoinDTOs() = map { it.toCoinDTO() }
+fun List<Coin>.toCoinsDTO() = map { it.toCoinDTO() }

@@ -3,10 +3,12 @@ package com.realityexpander.cryptoapp.data.remote.dto
 
 import com.google.gson.annotations.SerializedName
 
+// using the gson library to serialize the json data
+
 data class CoinInfoDTO(
     val id: String,
     val description: String,
-    @SerializedName("development_status")
+    @SerializedName("development_status") // note this annotation for gson library
     val developmentStatus: String = "",
     @SerializedName("first_data_at")
     val firstDataAt: String = "",

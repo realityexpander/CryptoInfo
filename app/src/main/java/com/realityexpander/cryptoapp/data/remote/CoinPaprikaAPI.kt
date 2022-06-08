@@ -12,7 +12,4 @@ interface CoinPaprikaAPI {
     @GET("v1/coins/{coinId}")
     suspend fun getCoinInfoDTOById(@Path("coinId") coinId: String): CoinInfoDTO
 
-//    @GET("coins/{id}/market_chart/range/{start}/{end}")
-//    fun getCoinHistory(@Path("id") id: String, @Path("start") start: String, @Path("end") end: String): Call<CoinHistory>
-
 }

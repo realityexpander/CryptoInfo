@@ -63,106 +63,110 @@ fun CoinInfoScreen(
                     Spacer(modifier = Modifier.height(15.dp))
                 }
 
-                state.coinInfo?.let { coinInfo ->
-                    // Basic info
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween, // uses weights
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        // Back arrow button
-                        IconButton(
-                            onClick = { navController.navigateUp() },
-                            modifier = Modifier
-                                .padding(start = 0.dp, end = 5.dp)
-                                .weight(1f)
+                if (!state.isError && !state.isLoading) {
+                    if(state.coinInfo.coinId.isNotEmpty()) { // check empty instead of null for better UX
+                        val coinInfo = state.coinInfo
+
+                        // Basic info
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween, // uses weights
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Icon(
-                                imageVector = Icons.Filled.ArrowBack,
-                                tint = MaterialTheme.colors.onBackground,
-                                contentDescription = "Back",
+                            // Back arrow button
+                            IconButton(
+                                onClick = { navController.navigateUp() },
+                                modifier = Modifier
+                                    .padding(start = 0.dp, end = 5.dp)
+                                    .weight(1f)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Filled.ArrowBack,
+                                    tint = MaterialTheme.colors.onBackground,
+                                    contentDescription = "Back",
+                                )
+                            }
+
+                            // Coin Name & Active
+                            Text(
+                                text = "${coinInfo.rank + 1}. ${coinInfo.name} (${coinInfo.symbol})",
+                                style = MaterialTheme.typography.h2,
+                                textAlign = TextAlign.Left,
+                                modifier = Modifier.weight(8f)  // out of 10f
+                            )
+                            Text(
+                                text = if (coinInfo.isActive) "Active" else "Inactive",
+                                color = if (coinInfo.isActive) Color.Green else MaterialTheme.colors.error,
+                                fontStyle = FontStyle.Italic,
+                                textAlign = TextAlign.End,
+                                modifier = Modifier
+                                    .align(CenterVertically)
+                                    .weight(2f)  // out of 10f
                             )
                         }
+                        Spacer(modifier = Modifier.height(15.dp))
 
-                        // Coin Name & Active
+                        // Current Price (Loaded async from info)
+                        coinInfo.ohlcvToday?.let {
+                            Text(
+                                text = "Price \$${
+                                    coinInfo.ohlcvToday
+                                        .close
+                                        .roundToDecimalPlaces(4)
+                                }",
+                                style = MaterialTheme.typography.h2,
+                                textAlign = TextAlign.Left,
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(15.dp))
+
+                        // Description
                         Text(
-                            text = "${coinInfo.rank + 1}. ${coinInfo.name} (${coinInfo.symbol})",
-                            style = MaterialTheme.typography.h2,
-                            textAlign = TextAlign.Left,
-                            modifier = Modifier.weight(8f)  // out of 10f
+                            text = coinInfo.description,
+                            style = MaterialTheme.typography.body2,
                         )
+                        Spacer(modifier = Modifier.height(15.dp))
+
+
+                        // Tags
                         Text(
-                            text = if (coinInfo.isActive) "Active" else "Inactive",
-                            color = if (coinInfo.isActive) Color.Green else MaterialTheme.colors.error,
-                            fontStyle = FontStyle.Italic,
-                            textAlign = TextAlign.End,
-                            modifier = Modifier
-                                .align(CenterVertically)
-                                .weight(2f)  // out of 10f
+                            text = "Tags:",
+                            style = MaterialTheme.typography.h3
                         )
-                    }
-                    Spacer(modifier = Modifier.height(15.dp))
+                        Spacer(modifier = Modifier.height(15.dp))
+                        FlowRow(
+                            mainAxisSpacing = 10.dp,
+                            crossAxisSpacing = 8.dp,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            CoinTags(coinInfo.tags)
+                        }
+                        Spacer(modifier = Modifier.height(15.dp))
+                        Divider()
 
-                    // Current Price
-                    coinInfo.ohlcvToday?.let {
                         Text(
-                            text = "Price \$${
-                                coinInfo.ohlcvToday
-                                    .close
-                                    .roundToDecimalPlaces(4)
-                            }",
-                            style = MaterialTheme.typography.h2,
-                            textAlign = TextAlign.Left,
+                            text = "Web resources:",
+                            style = MaterialTheme.typography.h3
                         )
+                        LaunchWebsiteButton(
+                            coinInfo.linkCatalog.websites.firstOrNull()
+                                ?: coinInfo.linkCatalog.facebooks.firstOrNull()
+                                ?: coinInfo.linkCatalog.reddits.firstOrNull()
+                                ?: "",
+                            LocalContext.current
+                        )
+                        Spacer(modifier = Modifier.height(5.dp))
+                        Divider()
+
+                        // Team Members header
+                        Text(
+                            text = "Team members:",
+                            style = MaterialTheme.typography.h3
+                        )
+                        Spacer(modifier = Modifier.height(5.dp))
+                        TeamMembersList(coinInfo.teamMembers)
+
                     }
-                    Spacer(modifier = Modifier.height(15.dp))
-
-                    // Description
-                    Text(
-                        text = coinInfo.description,
-                        style = MaterialTheme.typography.body2,
-                    )
-                    Spacer(modifier = Modifier.height(15.dp))
-
-
-                    // Tags
-                    Text(
-                        text = "Tags:",
-                        style = MaterialTheme.typography.h3
-                    )
-                    Spacer(modifier = Modifier.height(15.dp))
-                    FlowRow(
-                        mainAxisSpacing = 10.dp,
-                        crossAxisSpacing = 8.dp,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        CoinTags(coinInfo.tags)
-                    }
-                    Spacer(modifier = Modifier.height(15.dp))
-                    Divider()
-
-                    Text(
-                        text = "Web resources:",
-                        style = MaterialTheme.typography.h3
-                    )
-                    LaunchWebsiteButton(
-                        coinInfo.linkCatalog.websites.firstOrNull()
-                            ?: coinInfo.linkCatalog.facebooks.firstOrNull()
-                            ?: coinInfo.linkCatalog.reddits.firstOrNull()
-                            ?: "",
-                        LocalContext.current
-                    )
-                    Spacer(modifier = Modifier.height(5.dp))
-                    Divider()
-
-                    // Team Members header
-                    Text(
-                        text = "Team members:",
-                        style = MaterialTheme.typography.h3
-                    )
-                    Spacer(modifier = Modifier.height(5.dp))
-                    TeamMembersList(coinInfo.teamMembers)
-
                 }
             }
         }

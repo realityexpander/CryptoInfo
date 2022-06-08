@@ -3,10 +3,10 @@ package com.realityexpander.cryptoapp.domain.models
 import com.realityexpander.cryptoapp.data.remote.dto.*
 
 data class CoinInfo(
-    val coinId: String,
-    val name: String,
-    val symbol: String,
-    val ohlcvToday:  CoinOHLCVItemDTO? = null,
+    val coinId: String = "",
+    val name: String = "",
+    val symbol: String = "",
+    val ohlcvToday:  CoinOHLCVItemDTO? = null, // keep nullable until successful load
     val description: String = "",
     val isActive: Boolean = false,
     val tags: List<String> = emptyList(),

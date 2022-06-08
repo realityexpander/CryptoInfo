@@ -1,4 +1,4 @@
-package com.realityexpander.cryptoapp.domain.use_case.get_coin
+package com.realityexpander.cryptoapp.domain.use_case.get_coin_info
 
 import com.realityexpander.cryptoapp.common.Resource
 import com.realityexpander.cryptoapp.domain.models.CoinInfo

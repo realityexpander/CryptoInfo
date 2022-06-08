@@ -8,7 +8,8 @@ import com.realityexpander.cryptoapp.common.Constants.PARAM_COIN_ID
 import com.realityexpander.cryptoapp.common.Resource
 import com.realityexpander.cryptoapp.data.remote.dto.CoinOHLCVItemDTO
 import com.realityexpander.cryptoapp.data.remote.dto.CoinOHLCVItemsDTO
-import com.realityexpander.cryptoapp.domain.use_case.get_coin.GetCoinInfoUseCase
+import com.realityexpander.cryptoapp.domain.models.CoinInfo
+import com.realityexpander.cryptoapp.domain.use_case.get_coin_info.GetCoinInfoUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -33,6 +34,7 @@ class CoinInfoViewModel @Inject constructor(
     init {
         savedStateHandle.get<String>(PARAM_COIN_ID)?.also { coinId ->
             getCoinInfo(coinId)
+            getCoinPrice(coinId)
         }
     }
 
@@ -40,11 +42,20 @@ class CoinInfoViewModel @Inject constructor(
         getCoinInfoUseCase(coinId).onEach { result ->
             when (result) {
                 is Resource.Success -> {
+                    val prevOHLCVToday = state.value.coinInfo.ohlcvToday
+
                     state.value = state.value.copy(
                         isLoading = false,
-                        coinInfo = result.data
+                        coinInfo = result.data ?: CoinInfo()
                     )
-                    getCoinPrice(coinId) // get the price *after* we have a valid CoinInfo object
+                    // Since ohlcvToday is loaded Async and part of CoinInfo object,
+                    // we need to copy prev value (not loaded=null, loaded=valid data.)
+                    // ** This really should be kept as a separate state object. **
+                    state.value = state.value.copy(
+                        coinInfo = state.value.coinInfo.copy(
+                            ohlcvToday = prevOHLCVToday
+                        )
+                    )
                 }
                 is Resource.Error -> {
                     state.value = state.value.copy(
@@ -70,12 +81,12 @@ class CoinInfoViewModel @Inject constructor(
 
                     //println(latestOHLCVResult.data) // leave for debug
 
-                    // Check for null data
+                    // If API limit is reached, we receive a null data response
                     if (latestOHLCVResult.data == null) {
                         state.value = state.value.copy(
                             isError = true,
                             errorMessage = "Error getting price data. Likely API Limit reached.",
-                            coinInfo = state.value.coinInfo?.copy(
+                            coinInfo = state.value.coinInfo.copy(
                                 ohlcvToday = null
                             ),
                         )
@@ -83,7 +94,7 @@ class CoinInfoViewModel @Inject constructor(
                     }
 
                     state.value = state.value.copy(
-                        coinInfo = state.value.coinInfo?.copy(
+                        coinInfo = state.value.coinInfo.copy(
                             ohlcvToday = latestOHLCVResult.data.copy()
                         ),
                     )
