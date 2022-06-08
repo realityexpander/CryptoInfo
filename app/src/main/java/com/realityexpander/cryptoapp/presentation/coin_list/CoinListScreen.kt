@@ -1,4 +1,4 @@
-package com.realityexpander.cryptoapp.presentation.coin_list.components
+package com.realityexpander.cryptoapp.presentation.coin_list
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.realityexpander.cryptoapp.presentation.Screen
-import com.realityexpander.cryptoapp.presentation.coin_list.CoinListViewModel
+import com.realityexpander.cryptoapp.presentation.coin_list.components.CoinListItem
 
 @Composable
 fun CoinListScreen(
@@ -32,11 +32,13 @@ fun CoinListScreen(
                 CoinListItem(
                     coin = coin,
                     onClick = {
-                        navController.navigate(Screen.CoinInfoScreen.route + "/${coin.id}.")
+                        navController.navigate(Screen.CoinInfoScreen.route + "/${coin.id}")
                     },
                 )
             }
         }
+
+        // Alternate way
 //            items(count = state.coins.size,
 //                key = { i -> state.coins[i].symbol }
 //            ) { i ->

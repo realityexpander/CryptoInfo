@@ -12,15 +12,15 @@ import javax.inject.Inject
 
 
 // "Use case" should have ONLY ONE RESPONSIBILITY (ie: one function, the invoke)
-class GetCoinUseCase @Inject constructor(
+class GetCoinInfoUseCase @Inject constructor(
     private val coinsRepo: CoinRepositoryInterface
 ) {
     operator fun invoke(coinId: String): Flow<Resource<CoinInfo>> = flow {
         try {
             emit(Resource.Loading())
 
-            val coin = coinsRepo.getCoinInfoDTO(coinId)
-            emit(Resource.Success(coin.toCoinInfo()))
+            val coinInfo = coinsRepo.getCoinInfoDTO(coinId)
+            emit(Resource.Success(coinInfo.toCoinInfo()))
         } catch (e: HttpException) {
             emit(Resource.Error(e.localizedMessage
                 ?: "An unexpected Error occurred.")

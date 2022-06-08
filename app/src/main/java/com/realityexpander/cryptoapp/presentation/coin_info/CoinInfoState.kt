@@ -1,4 +1,4 @@
-package com.realityexpander.cryptoapp.presentation.coin_detail
+package com.realityexpander.cryptoapp.presentation.coin_info
 
 import com.realityexpander.cryptoapp.domain.models.CoinInfo
 
