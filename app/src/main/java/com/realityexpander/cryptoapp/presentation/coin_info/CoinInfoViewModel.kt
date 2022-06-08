@@ -36,12 +36,39 @@ class CoinInfoViewModel @Inject constructor(
         }
     }
 
+    private fun getCoinInfo(coinId: String) {
+        getCoinInfoUseCase(coinId).onEach { result ->
+            when (result) {
+                is Resource.Success -> {
+                    state.value = state.value.copy(
+                        isLoading = false,
+                        coinInfo = result.data
+                    )
+                    getCoinPrice(coinId) // get the price *after* we have a valid CoinInfo object
+                }
+                is Resource.Error -> {
+                    state.value = state.value.copy(
+                        isLoading = false,
+                        isError = true,
+                        errorMessage = result.errorMessage ?: "Unknown Error"
+                    )
+                }
+                is Resource.Loading -> {
+                    state.value = state.value.copy(
+                        isLoading = true,
+                        isError = false
+                    )
+                }
+            }
+        }.launchIn(viewModelScope) // starts the flow
+    }
+
     private fun getCoinPrice(coinId: String) {
         viewModelScope.launch {
             when (val latestOHLCVResult = getLatestOHLCV(coinId)) {
                 is Resource.Success -> {
 
-                    println(latestOHLCVResult.data)
+                    //println(latestOHLCVResult.data) // leave for debug
 
                     // Check for null data
                     if (latestOHLCVResult.data == null) {
@@ -72,58 +99,31 @@ class CoinInfoViewModel @Inject constructor(
         }
     }
 
-    private fun getCoinInfo(coinId: String) {
-        getCoinInfoUseCase(coinId).onEach { result ->
-            when (result) {
-                is Resource.Success -> {
-                    state.value = state.value.copy(
-                        isLoading = false,
-                        coinInfo = result.data
-                    )
-                    getCoinPrice(coinId) // get the price *after* we have a valid CoinInfo object
-                }
-                is Resource.Error -> {
-                    state.value = state.value.copy(
-                        isLoading = false,
-                        isError = true,
-                        errorMessage = result.errorMessage ?: "Unknown Error"
-                    )
-                }
-                is Resource.Loading -> {
-                    state.value = state.value.copy(
-                        isLoading = true,
-                        isError = false
-                    )
-                }
+    private suspend fun getLatestOHLCV(
+        coinId: String
+    ): Resource<CoinOHLCVItemDTO> {
+        val jsonDecodeLenientIgnoreUnknown = Json {
+            isLenient = true
+            ignoreUnknownKeys = true
+        }
+        return withContext(kotlinx.coroutines.Dispatchers.IO) {
+            try {
+                val response =
+                    URL(
+                        "https://api.coinpaprika.com/v1/coins/${coinId}/ohlcv/latest"
+                    ).readText()
+
+                //println(response) // leave for debug purposes
+
+                // Get the OHLCV prices for today from the response
+                Resource.Success(
+                    jsonDecodeLenientIgnoreUnknown
+                        .decodeFromString<CoinOHLCVItemsDTO>(response)[0]
+                )
+            } catch (e: Exception) {
+                Resource.Error(message = "Error getting price data. Likely API Limit reached.")
             }
-        }.launchIn(viewModelScope) // starts the flow
-    }
-}
-
-private suspend fun CoinInfoViewModel.getLatestOHLCV(
-    coinId: String
-): Resource<CoinOHLCVItemDTO> {
-    val jsonDecodeLenientIgnoreUnknown = Json {
-        isLenient = true
-        ignoreUnknownKeys = true
-    }
-    return withContext(kotlinx.coroutines.Dispatchers.IO) {
-        try {
-            val response =
-                URL(
-                    "https://api.coinpaprika.com/v1/coins/${coinId}/ohlcv/latest"
-
-                ).readText()
-
-            //println(response) // leave for debug purposes
-
-            // Get the OHLCV for today from the response
-            Resource.Success(
-                jsonDecodeLenientIgnoreUnknown
-                    .decodeFromString<CoinOHLCVItemsDTO>(response)[0]
-            )
-        } catch (e: Exception) {
-            Resource.Error(message = "Error getting price data. Likely API Limit reached.")
         }
     }
 }
+
