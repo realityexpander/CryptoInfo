@@ -15,9 +15,12 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import com.realityexpander.cryptoapp.data.remote.dto.TeamMember
 
-@Suppress("FunctionName")  // remove capitalization warning
-fun LazyListScope.TeamMembersList(teamMembers: List<TeamMember>) {
-    items(teamMembers) { member ->
+//@Suppress("FunctionName")  // remove capitalization warning
+//fun LazyListScope.TeamMembersList(teamMembers: List<TeamMember>) {
+@Composable
+fun TeamMembersList(teamMembers: List<TeamMember>) {
+//    items(teamMembers) { member ->
+    teamMembers.forEach { member ->
         TeamListItem(
             member,
             modifier = Modifier

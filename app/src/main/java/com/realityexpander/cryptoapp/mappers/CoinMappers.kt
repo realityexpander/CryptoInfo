@@ -27,10 +27,11 @@ fun CoinInfoDTO.toCoinInfo() = CoinInfo(
     symbol = symbol,
     description = description,
     isActive = isActive,
-    tags = tags.map { it.name },
+    tags = tags.map { it.name }, // Want names of tags only
     teamMembers = teamMembers,
     type = type,
     whitepaper = whitepaper,
+    linkCatalog = linkCatalog,
 )
 
 fun CoinInfo.toCoinInfoDTO() = CoinInfoDTO(
