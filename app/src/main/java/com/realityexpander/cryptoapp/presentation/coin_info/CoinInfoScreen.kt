@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import coil.compose.AsyncImage
 import com.google.accompanist.flowlayout.FlowRow
 import com.realityexpander.cryptoapp.common.roundToDecimalPlaces
@@ -39,12 +38,7 @@ fun CoinInfoScreen(
 ) {
     val state = viewModel.state.value
 
-    val circularProgressDrawable = CircularProgressDrawable(LocalContext.current)
-    circularProgressDrawable.strokeWidth = 5f
-    circularProgressDrawable.centerRadius = 30f
-    circularProgressDrawable.start()
-
-
+    // Shows image as a backdrop
     AsyncImage(
         model = "file:///android_asset/facility_photo_1.jpg",
         contentScale = ContentScale.FillHeight,
