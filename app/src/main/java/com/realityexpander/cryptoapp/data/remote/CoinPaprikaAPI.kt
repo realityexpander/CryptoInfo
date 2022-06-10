@@ -11,5 +11,4 @@ interface CoinPaprikaAPI {
 
     @GET("v1/coins/{coinId}")
     suspend fun getCoinInfoDTOById(@Path("coinId") coinId: String): CoinInfoDTO
-
 }

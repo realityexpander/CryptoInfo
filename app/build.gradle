@@ -22,7 +22,7 @@ android {
         }
 
         // Should use Mock Data for Retrofit calls?
-        buildConfigField "boolean", "MOCK_MODE", "true"
+        buildConfigField "boolean", "MOCK_MODE", "false"
     }
 
     buildTypes {

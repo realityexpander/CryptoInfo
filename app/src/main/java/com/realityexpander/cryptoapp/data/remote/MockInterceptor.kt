@@ -57,7 +57,7 @@ fun getCoinsFileJson(context: Context): String {
 
 fun getFileJson(context: Context, assetsFile: String): String {
     return try {
-        val inputStream = context.assets.open("coins.json")
+        val inputStream = context.assets.open(assetsFile)
         val buffer = ByteArray(inputStream.available())
         inputStream.read(buffer)
         inputStream.close()
