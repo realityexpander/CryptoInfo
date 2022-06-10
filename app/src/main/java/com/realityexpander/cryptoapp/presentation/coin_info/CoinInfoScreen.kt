@@ -3,7 +3,6 @@ package com.realityexpander.cryptoapp.presentation.coin_info
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.text.style.StyleSpan
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.ClickableText
@@ -15,17 +14,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.Typeface
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
+import coil.compose.AsyncImage
 import com.google.accompanist.flowlayout.FlowRow
 import com.realityexpander.cryptoapp.common.roundToDecimalPlaces
 import com.realityexpander.cryptoapp.presentation.coin_info.components.CoinTags
@@ -37,6 +38,19 @@ fun CoinInfoScreen(
     viewModel: CoinInfoViewModel = hiltViewModel(),
 ) {
     val state = viewModel.state.value
+
+    val circularProgressDrawable = CircularProgressDrawable(LocalContext.current)
+    circularProgressDrawable.strokeWidth = 5f
+    circularProgressDrawable.centerRadius = 30f
+    circularProgressDrawable.start()
+
+
+    AsyncImage(
+        model = "file:///android_asset/facility_photo_1.jpg",
+        contentScale = ContentScale.FillHeight,
+        contentDescription = "Facility Photo",
+        modifier = Modifier.fillMaxHeight()
+    )
 
     Box(modifier = Modifier.fillMaxSize()) {
 
@@ -64,7 +78,7 @@ fun CoinInfoScreen(
                 }
 
                 if (!state.isLoading) {
-                    if(state.coinInfo.coinId.isNotEmpty()) { // check empty instead of null for better UX
+                    if (state.coinInfo.coinId.isNotEmpty()) { // check empty instead of null for better UX
                         val coinInfo = state.coinInfo
 
                         // Basic info
@@ -175,17 +189,25 @@ fun CoinInfoScreen(
 
 @Composable
 fun LaunchWebsiteButton(website: String, context: Context) {
-    if (website.isEmpty()) { return }
+    if (website.isEmpty()) {
+        return
+    }
 
     ClickableText(
         with(AnnotatedString.Builder()) {
-            pushStyle(SpanStyle(
-                color = MaterialTheme.colors.onBackground,
-                textDecoration = TextDecoration.Underline,
-                fontStyle = FontStyle.Italic )
+            pushStyle(
+                SpanStyle(
+                    color = MaterialTheme.colors.onBackground,
+                    textDecoration = TextDecoration.Underline,
+                    fontStyle = FontStyle.Italic
+                )
             )
-            append("${website.substringAfter("://")
-                .replace("www.", "")}")
+            append(
+                "${
+                    website.substringAfter("://")
+                        .replace("www.", "")
+                }"
+            )
             toAnnotatedString()
         },
         style = MaterialTheme.typography.body2,

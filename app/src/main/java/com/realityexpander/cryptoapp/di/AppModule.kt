@@ -74,18 +74,10 @@ object AppModule {
         @Named("MockCoinPaprikaAPI") mockCoinPaprikaAPI: CoinPaprikaAPI
     ): CoinRepositoryInterface {
 
-        // if (BuildConfig.DEBUG) {
         if (BuildConfig.MOCK_MODE) {
             return CoinRepositoryImpl(mockCoinPaprikaAPI)
         }
 
         return CoinRepositoryImpl(coinPaprikaAPI)
     }
-
-//    @Provides
-//    @Singleton
-//    @Named("MockCoinPaprikaAPI")
-//    fun provideMockCoinRepository(coinPaprikaAPI: CoinPaprikaAPI): CoinRepositoryInterface {
-//        return CoinRepositoryImpl(coinPaprikaAPI)
-//    }
 }
