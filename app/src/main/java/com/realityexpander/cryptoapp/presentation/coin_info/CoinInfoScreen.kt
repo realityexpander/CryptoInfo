@@ -197,10 +197,8 @@ fun LaunchWebsiteButton(website: String, context: Context) {
                 )
             )
             append(
-                "${
-                    website.substringAfter("://")
-                        .replace("www.", "")
-                }"
+                website.substringAfter("://")
+                    .replace("www.", "")
             )
             toAnnotatedString()
         },

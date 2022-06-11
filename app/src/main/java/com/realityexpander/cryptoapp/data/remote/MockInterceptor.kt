@@ -8,9 +8,7 @@ import okhttp3.Protocol
 import okhttp3.Response
 
 import okhttp3.ResponseBody.Companion.toResponseBody
-import java.io.ByteArrayOutputStream
 import java.io.IOException
-import java.io.InputStream
 import javax.inject.Inject
 
 /**
@@ -52,10 +50,10 @@ class MockInterceptor @Inject constructor(private val context: Context) : Interc
 }
 
 fun getCoinsFileJson(context: Context): String {
-    return getFileJson(context, "coins.json")
+    return getJsonAssetFile(context, "coins.json")
 }
 
-fun getFileJson(context: Context, assetsFile: String): String {
+fun getJsonAssetFile(context: Context, assetsFile: String): String {
     return try {
         val inputStream = context.assets.open(assetsFile)
         val buffer = ByteArray(inputStream.available())
