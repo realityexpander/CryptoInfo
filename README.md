@@ -18,7 +18,7 @@ Cryptocurrency info App built with MVVM, Use Cases, Compose, Custom charts, Retr
 To install the Apk:
 
 1. Open this link on your Android device:
-   https://github.com/realityexpander/StockMarketApp/blob/master/CryptoInfo_1.0.apk
+   https://github.com/realityexpander/CryptoInfo/blob/master/CryptoInfo_1.0.apk
 2. Tap the "skewer" menu and tap the "download"
 
    [![](https://user-images.githubusercontent.com/5157474/147434050-57102a30-af32-46ed-a90b-d94e0c4a4f35.jpg)]()
